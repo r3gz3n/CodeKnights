@@ -1,0 +1,11 @@
+{% extends "base.html" %}
+{% block title %}{{ problem.problemTitle }}{% endblock %}
+{% block content %}
+<a href='http://localhost:8000/contest/submit'>Submit</a>
+<a href='http://localhost:8000/team/logout'>Logout</a> <br/>
+
+<div id='problemdetail'>
+    <h2>{{ problem.problemTitle }}</h2> <br/>
+    {{ problem.problemStatement|safe }}<br/>
+</div>
+{% endblock %}

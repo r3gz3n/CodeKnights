@@ -1,0 +1,10 @@
+{% extends "base.html" %}
+{% block title %}Contest{% endblock %}
+{% block content %}
+<a href='http://localhost:8000/team/logout'>Logout<a/><br/>
+<div id='contest'>
+    {% for p in problems %}
+        <a href='http://localhost:8000/contest/problems?q={{ p.problemId }}'>{{ p.problemTitle }}</a><br/>
+    {% endfor %}
+</div>
+{% endblock %}

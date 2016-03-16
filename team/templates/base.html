@@ -1,0 +1,15 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <title> {% block title %} {% endblock %} </title>
+</head>
+
+<body>
+    <a href='http://localhost:8000/contest/firstcontest'>Contest</a>
+    <a href='http://localhost:8000/submissions/my'>Submissions</a>
+    <a href='http://localhost:8000/team/teampage'>Team Details</a>
+    <a href='http://localhost:8000/'>Ranklist</a><br/>
+    {% block content %}
+    {% endblock %}
+</body>
+</html>

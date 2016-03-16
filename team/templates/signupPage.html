@@ -1,0 +1,13 @@
+{% extends 'base.html' %}
+
+{% block title %} Signup {% endblock %}
+{% block content %}
+    <div id='teamdetail'>
+        <form action='' method='POST'>
+        {% for field in team %}
+        {{ field.lable_tag }} <input type='text'/> <br/>
+        {% endfor %}
+        <input type='submit' value='Submit'/>
+        </form>
+    </div>
+{% endblock %}

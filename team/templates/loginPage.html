@@ -1,0 +1,16 @@
+{% extends 'base.html' %}
+
+{% block title %} Team Page {% endblock %}
+{{ error_message }}
+{% block content %}
+    <div id='login'>
+        <form action='' method='POST'>
+            {% csrf_token %}
+            {% for field in login_form %}
+                {{ field.label_tag }} {{ field }} <br/>
+            {% endfor %}
+            <input type='submit' value='Submit'/>
+        </form>
+        <a href='http://localhost:8000/team/signup'><input type='submit' value='Signup'/></a>
+    </div>
+{% endblock %}

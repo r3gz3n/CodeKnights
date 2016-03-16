@@ -1,0 +1,10 @@
+{% extends 'base.html' %}
+
+{% block title %} Team Page {% endblock %}
+{% block content %}
+    <div id='teamdetail'>
+        {% for field in team %}
+            {{ field.lable_tag }} {{ field }}
+        {% endfor %}
+    </div>
+{% endblock %}

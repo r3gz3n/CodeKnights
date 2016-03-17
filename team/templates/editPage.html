@@ -1,10 +1,15 @@
 {% extends 'base.html' %}
 
-{% block title %} Team Page {% endblock %}
+{% block title %} Edit {% endblock %}
 {% block content %}
-    <div id='teamdetail'>
-        {% for field in team %}
-            {{ field.lable_tag }} {{ field }}
-        {% endfor %}
+<a href='http://localhost:8000/team/logout'>Logout</a>
+    <div id='edit'>
+        <form action='' method='POST'>
+            {% csrf_token %}
+            {% for field in edit_form %}
+            {{ field.label_tag }} {{ field }} <br/>
+            {% endfor %}
+        <input type='submit' value='Submit'/>
+        </form>
     </div>
 {% endblock %}

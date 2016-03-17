@@ -76,7 +76,6 @@ def editPage(request):
             team_name = request.session['team_name']
         except KeyError:
             return HttpResponseRedirect('http://localhost:8000/team/login')
-        print team_name
         team_details = TeamDetails.objects.get(teamName=team_name)
         edit_form = TeamDetailsForm(request.POST, instance = team_details)
         edit_form.save()
@@ -91,7 +90,6 @@ def editPage(request):
             team_name = request.session['team_name']
         except KeyError:
             return HttpResponseRedirect('http://localhost:8000/team/login')
-        print team_name, ":P"
         team_details = TeamDetails.objects.get(teamName=team_name)
         edit_form = TeamDetailsForm(initial={'teamName':team_details.teamName,
                                                 'member1Name':team_details.member1Name,

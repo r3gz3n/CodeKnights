@@ -1,0 +1,33 @@
+{% extends 'base.html' %}
+
+{% block title %} All Submissions {% endblock %}
+
+{% block content %}
+<a href='http://localhost:8000/team/logout'>Logout</a><br/>
+
+    <div id='teamdetail'>
+        <table>
+            <tr>
+                <td>Team Name</td>
+                <td>Submission Time</td>
+                <td>Problem Title</td>
+                <td>Verdict</td>
+                <td>Time Taken</td>
+                <td>Memory Taken</td>
+                <td>Language</td>
+            </tr>
+        {% for submission in allSubmissions %}
+            <tr>
+                <td>{{submission.teamName}}</td>
+                <td>{{submission.submissionTime}}</td>
+                <td>{{submission.problemTitle}}</td>
+                <td>{{submission.verdict}}</td>
+                <td>{{submission.timeTaken}}</td>
+                <td>{{submission.memoryTaken}}</td>
+                <td>{{submission.language}}</td>
+            </tr>
+
+        {% endfor %}
+        </table>
+    </div>
+{% endblock %}

@@ -1,8 +1,8 @@
 from django.template import Context, loader
 from django.http import HttpResponse, HttpResponseRedirect
 from contest.models import Problems
-from submissions.models import Submissions
-from submissions.forms import SubmissionsForm
+#from submissions.models import Submissions
+#from submissions.forms import SubmissionsForm
 from django.shortcuts import render
 
 
@@ -44,7 +44,7 @@ def contestPage(request):
     t = loader.get_template('contestPage.html')
     c = Context({'problems':problem_details})
     return HttpResponse(t.render(c))
-
+'''
 def submitPage(request):
     if request.method == 'POST':
         print ":P"
@@ -54,13 +54,13 @@ def submitPage(request):
             return HttpResponseRedirect('http://localhost:8000/team/login')
         submissionsForm = SubmissionsForm(request.POST)
         print request.POST['solution']
-        '''
+
         if submissionsForm.is_valid():
             submission = submissionsForm.save(commit = False)
             submission.teamName = team_name
             submission.submissionTime = datatime.datetime.now()
             submission.solution
-        '''
+
         return HttpResponseRedirect('http://localhost:8000/submissions/my');
 
     else:
@@ -70,3 +70,4 @@ def submitPage(request):
             return HttpResponseRedirect('http://localhost:8000/team/login')
         submit = SubmissionsForm()
         return render(request, 'submitPage.html', {'submissionsForm':submit, 'error_message':''})
+'''

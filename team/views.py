@@ -20,11 +20,12 @@ def signupPage(request):
         signup_form = TeamDetailsForm(request.POST)
         if signup_form.is_valid():
             team_name = signup_form.cleaned_data['teamName']
-            if TeamDetails.objects.filter(teamName=team_name).exists() == True:
+            try:
+                team_details = TeamDetails.objects.get(teamName=team_name)
+                signup_form.save()
+            except TeamDetails.DoesNotExist:
                 signup_form = TeamDetailsForm()
                 return render(request, 'signupPage.html', {'signup_form':signup_form, 'error_message':'Team Name Already Exists'})
-            else:
-                signup_form.save()
         login_form = TeamPassForm()
         try:
             del request.session['team_name']

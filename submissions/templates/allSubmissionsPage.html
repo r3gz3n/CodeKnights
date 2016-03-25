@@ -6,25 +6,25 @@
 <a href='http://localhost:8000/team/logout'>Logout</a><br/>
 
     <div id='teamdetail'>
-        <table>
+        <table border="1"  width="100%">
             <tr>
-                <td>Team Name</td>
-                <td>Submission Time</td>
-                <td>Problem Title</td>
-                <td>Verdict</td>
-                <td>Time Taken</td>
-                <td>Memory Taken</td>
-                <td>Language</td>
+                <td align="center">Team Name</td>
+                <td align="center">Submission Time</td>
+                <td align="center">Problem Title</td>
+                <td align="center">Verdict</td>
+                <td align="center">Time Taken</td>
+                <td align="center">Memory Taken</td>
+                <td align="center">Language</td>
             </tr>
         {% for submission in allSubmissions %}
             <tr>
-                <td>{{submission.teamName}}</td>
-                <td>{{submission.submissionTime}}</td>
-                <td>{{submission.problemTitle}}</td>
-                <td>{{submission.verdict}}</td>
-                <td>{{submission.timeTaken}}</td>
-                <td>{{submission.memoryTaken}}</td>
-                <td>{{submission.language}}</td>
+                <td align="center">{{submission.teamName}}</td>
+                <td align="center">{{submission.submissionTime}}</td>
+                <td align="center">{{submission.problemTitle}}</td>
+                <td align="center">{{submission.verdict}}</td>
+                <td align="center">{{submission.timeTaken}}</td>
+                <td align="center">{{submission.memoryTaken}}</td>
+                <td align="center">{{submission.language}}</td>
             </tr>
 
         {% endfor %}

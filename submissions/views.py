@@ -28,6 +28,7 @@ def allSubmissionsPage(request):
         timeTaken = submission.timeTaken
         memoryTaken = submission.memoryTaken
         all_submissions_details.append(SubmissionDetails(teamName, problemTitle, submissionTime, verdict, language, timeTaken, memoryTaken))
+    all_submissions_details.reverse()
     t = loader.get_template('allSubmissionsPage.html')
     c = Context({'allSubmissions':all_submissions_details})
     return HttpResponse(t.render(c))
@@ -37,18 +38,22 @@ def mySubmissionsPage(request):
         team_name = request.session['team_name']
     except KeyError:
         return HttpResponseRedirect('http://localhost:8000/team/login')
-    my_submissions = Submissions.objects.get(teamName = team_name)
-    mySubmissionDetails = list()
+    try:
+        my_submissions = Submissions.objects.filter(teamName=team_name)
+    except Submissions.DoesNotExist:
+        my_submissions = list()
+    my_submissions_details = list()
     for submission in my_submissions:
-        solutions = submission.teamName
+        teamName = submission.teamName
         problemTitle = submission.problemId.replace('_', ' ')
         submissionTime = submission.submissionTime
         verdict = submission.verdict
         language = submission.language
         timeTaken = submission.timeTaken
         memoryTaken = submission.memoryTaken
-        my_submissions_details.append(MySubmissionDetails(teamName, problemTitle, submissionTime, verdict, language, timeTaken, memoryTaken))
-    t = loader.get_template('mySubmissionsPage.html')
-    c = Context({'mySubmissions':my_submissions_details})
+        my_submissions_details.append(SubmissionDetails(teamName, problemTitle, submissionTime, verdict, language, timeTaken, memoryTaken))
+    my_submissions_details.reverse()
+    t = loader.get_template('allSubmissionsPage.html')
+    c = Context({'allSubmissions':my_submissions_details})
     return HttpResponse(t.render(c))
 

@@ -4,13 +4,11 @@
 <a href='http://localhost:8000/team/logout'>Logout</a> <br/>
 
 <div id='submit'>
-    <form action='' method='POST'>
+    <form action='' method='POST' enctype="multipart/form-data">
         {% csrf_token %}
         {% for field in submissionsForm %}
             {{ field.label_tag }} {{ field  }} <br/>
-            {{ field.errors }}
         {% endfor %}
-        {{ form.non_field.error }}
         Solution: <input type='file' name='solution'/> <br/>
         <input type='submit' value='Submit' />
     </form>

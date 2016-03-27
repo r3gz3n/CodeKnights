@@ -11,19 +11,18 @@
                 <td align="center">Team Name</td>
                 <td align="center">Total Time</td>
                 <td align="center">Score</td>
-                <td align="center">Problem 1 Accepted Time</td>
-                <td align="center">Problem 2 Accepted Time</td>
-                <td align="center">Problem 3 Accepted Time</td>
-                <td align="center">Language</td>
+                <td align="center">Problem 1</td>
+                <td align="center">Problem 2</td>
+                <td align="center">Problem 3</td>
             </tr>
         {% for rank in ranklist %}
             <tr>
                 <td align="center">{{rank.teamName}}</td>
                 <td align="center">{{rank.totalTime}}</td>
                 <td align="center">{{rank.score}}</td>
-                <td align="center">{{rank.problem1time}}</td>
-                <td align="center">{{rank.problem2time}}</td>
-                <td align="center">{{rank.problem3time}}</td>
+                <td align="center">{{rank.problem1score}} - ({{rank.problem1WA}})</td>
+                <td align="center">{{rank.problem2score}} - ({{rank.problem2WA}})</td>
+                <td align="center">{{rank.problem3score}} - ({{rank.problem3WA}})</td>
             </tr>
 
         {% endfor %}

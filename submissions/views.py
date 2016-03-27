@@ -30,7 +30,7 @@ def allSubmissionsPage(request):
         all_submissions_details.append(SubmissionDetails(teamName, problemTitle, submissionTime, verdict, language, timeTaken, memoryTaken))
     all_submissions_details.reverse()
     t = loader.get_template('allSubmissionsPage.html')
-    c = Context({'allSubmissions':all_submissions_details})
+    c = Context({'allSubmissions':all_submissions_details, 'pageTitle' : 'All Submissions'})
     return HttpResponse(t.render(c))
 
 def mySubmissionsPage(request):
@@ -54,6 +54,6 @@ def mySubmissionsPage(request):
         my_submissions_details.append(SubmissionDetails(teamName, problemTitle, submissionTime, verdict, language, timeTaken, memoryTaken))
     my_submissions_details.reverse()
     t = loader.get_template('allSubmissionsPage.html')
-    c = Context({'allSubmissions':my_submissions_details})
+    c = Context({'allSubmissions':my_submissions_details, 'pageTitle' : 'My Submissions'})
     return HttpResponse(t.render(c))
 

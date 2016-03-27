@@ -1,10 +1,12 @@
 from django.template import Context, loader
 from django.http import HttpResponse, HttpResponseRedirect
-from contest.models import Problems
+from contest.models import Problems, Ranklist
 from submissions.forms import SubmissionsForm
 from django.shortcuts import render
 import datetime, subprocess
 
+problem = {'Hello_World' : 1, 'Sum_Of_Two_Numbers' : 2, 'Small_Factorial' : 3}
+contest_time = datetime.datetime(2016, 3, 27, 12, 50, 0)
 
 class Problem(object):
     def __init__(self, problemId, problemTitle, problemStatement=''):
@@ -47,7 +49,7 @@ def contestPage(request):
 
 
 def codecheckerDriver(solution, language, problemId):
-    verdict = ["Accepted", "", "Compilation Error", "RunTime Error", "Wrong Answer"]
+    verdict = ["Accepted", "Internal Error", "Compilation Error", "RunTime Error", "Wrong Answer"]
     run_cmd = "/home/r3gz3n/CodeKnights/submissions/codechecker " + solution + " " + language + " " + problemId
     process = subprocess.Popen(run_cmd ,stdout=subprocess.PIPE,shell=True)
     (output, err) = process.communicate()
@@ -79,10 +81,43 @@ def submitPage(request):
         if submissionsForm.is_valid():
             submission = submissionsForm.save(commit = False)
             submission.teamName = team_name
-            submission.submissionTime = datetime.datetime.now().strftime("%Y_%M_%d_%H_%m_%S")
+            submission_time = datetime.datetime.now()
+            submission.submissionTime = submission_time.strftime("%Y_%m_%d_%H_%M_%S")
             submission.timeTaken = 1
             submission.memoryTaken = 0.2
             submission.verdict = codecheckerDriver(submission.submissionTime, request.POST['language'], request.POST['problemId'])
+            try:
+                rank = Ranklist.objects.get(teamName = team_name)
+            except Ranklist.DoesNotExist:
+                rank = Ranklist(teamName = team_name)
+
+            if (submission.verdict[0] == 'W' or submission.verdict[0] == 'R'):
+                if problem[request.POST['problemId']] == 1 and rank.problem1score == False:
+                    rank.problem1WA += 1
+                elif problem[request.POST['problemId']] == 2 and rank.problem2score == False:
+                    rank.problem2WA += 1
+                elif problem[request.POST['problemId']] == 3 and rank.problem3score == False:
+                    rank.problem3WA += 1
+            elif submission.verdict[0] == 'A':
+                if problem[request.POST['problemId']] == 1 and rank.problem1score == False:
+                    rank.problem1score = True
+                    rank.score += 1
+                    rank.totalWA += rank.problem1WA
+                    time_taken = submission_time - contest_time
+                    rank.totalTime += time_taken.seconds + 20*60*rank.problem1WA
+                elif problem[request.POST['problemId']] == 2 and rank.problem2score == False:
+                    rank.problem2score = True
+                    rank.score += 1
+                    rank.totalWA += rank.problem2WA
+                    time_taken = submission_time - contest_time
+                    rank.totalTime += time_taken.seconds + 20*60*rank.problem2WA
+                elif problem[request.POST['problemId']] == 3 and rank.problem3score == False:
+                    rank.problem3score = True
+                    rank.score += 1
+                    rank.totalWA += rank.problem3WA
+                    time_taken = submission_time - contest_time
+                    rank.totalTime += time_taken.seconds + 20*60*rank.problem3WA
+            rank.save()
             submission.save()
             submissionsForm.save_m2m()
 
@@ -95,4 +130,15 @@ def submitPage(request):
             return HttpResponseRedirect('http://localhost:8000/team/login')
         submit = SubmissionsForm()
         return render(request, 'submitPage.html', {'submissionsForm':submit, 'error_message':''})
+
+
+def getKey(item):
+    return (item.score, item.totalTime)
+
+def ranklistPage(request):
+    ranklist = Ranklist.objects.all()
+    ranklist = sorted(ranklist, key=getKey)
+    t = loader.get_template("ranklistPage.html")
+    c = Context({"ranklist" : ranklist})
+    return HttpResponse(t.render(c))
 

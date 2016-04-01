@@ -7,6 +7,8 @@ import datetime, subprocess
 
 problem = {'Hello_World' : 1, 'Sum_Of_Two_Numbers' : 2, 'Small_Factorial' : 3}
 contest_time = datetime.datetime(2016, 3, 27, 12, 50, 0)
+verdict = ["Accepted", "Internal Error", "Compilation Error", "RunTime Error", "Wrong Answer", "Time Limit Exceeded", "Memory Limit Exceeded"]
+
 
 class Problem(object):
     def __init__(self, problemId, problemTitle, problemStatement=''):
@@ -49,7 +51,6 @@ def contestPage(request):
 
 
 def codecheckerDriver(solution, language, problemId):
-    verdict = ["Accepted", "Internal Error", "Compilation Error", "RunTime Error", "Wrong Answer"]
     run_cmd = "/home/r3gz3n/CodeKnights/submissions/codechecker " + solution + " " + language + " " + problemId
     process = subprocess.Popen(run_cmd ,stdout=subprocess.PIPE,shell=True)
     (output, err) = process.communicate()
@@ -132,12 +133,16 @@ def submitPage(request):
         return render(request, 'submitPage.html', {'submissionsForm':submit, 'error_message':''})
 
 
-def getKey(item):
-    return (item.score, item.totalTime)
+def getKey1(item):
+    return item.score
+
+def getKey2(item):
+    return item.totalTime
 
 def ranklistPage(request):
     ranklist = Ranklist.objects.all()
-    ranklist = sorted(ranklist, key=getKey)
+    ranklist = sorted(ranklist, key=getKey2)
+    ranklist = sorted(ranklist, key=getKey1, reverse = True)
     t = loader.get_template("ranklistPage.html")
     c = Context({"ranklist" : ranklist})
     return HttpResponse(t.render(c))

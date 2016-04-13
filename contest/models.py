@@ -6,6 +6,8 @@ class Problems(models.Model):
     problemId = models.CharField(max_length = 50)
     problemTitle = models.CharField(max_length = 50)
     problemPath = models.FilePathField(path = '/home/r3gz3n/CodeKnights/problems', allow_folders = True)
+    timeLimit = models.IntegerField()
+    memoryLimit = models.IntegerField()
 
 
 class Ranklist(models.Model):
@@ -22,7 +24,7 @@ class Ranklist(models.Model):
 
 
 class ProblemsAdmin(admin.ModelAdmin):
-    list_display = ('problemTitle', 'problemPath')
+    list_display = ('problemTitle', 'problemPath', 'timeLimit', 'memoryLimit')
 
 class RanklistAdmin(admin.ModelAdmin):
     list_display = ('teamName', 'totalTime', 'totalWA', 'score', 'problem1WA', 'problem1score', 'problem2WA', 'problem2score', 'problem3WA', 'problem3score')

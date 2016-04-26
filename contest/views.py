@@ -3,7 +3,7 @@ from django.http import HttpResponse, HttpResponseRedirect
 from contest.models import Problems, Ranklist
 from submissions.forms import SubmissionsForm
 from django.shortcuts import render
-import datetime, subprocess
+import datetime, subprocess, os
 
 problem = {'Hello_World' : 1, 'Sum_Of_Two_Numbers' : 2, 'Small_Factorial' : 3}
 contest_time = datetime.datetime(2016, 3, 27, 12, 50, 0)
@@ -50,16 +50,64 @@ def contestPage(request):
     return HttpResponse(t.render(c))
 
 
-def codecheckerDriver(solution, language, problemId):
-    run_cmd = "/home/r3gz3n/CodeKnights/submissions/codechecker " + solution + " " + language + " " + problemId
-    process = subprocess.Popen(run_cmd ,stdout=subprocess.PIPE,shell=True)
-    (output, err) = process.communicate()
-    exit_code = process.wait()
-    return verdict[exit_code]
+def compileRun(solution, language, problem_id):
+    problem = Problems.objects.get(problemId = problem_id)
+    filename = '/home/r3gz3n/CodeKnights/allSubmissions/' + solution
+    if language == 'C':
+        filename += '.c'
+    elif language == 'C++':
+        filename += '.cpp'
+    else:
+        filename += '.py'
+    TEST_DIR = '/home/r3gz3n/CodeKnights/logs'
+    errfile = os.path.join(TEST_DIR, "error.log")
+    outputfile = os.path.join(TEST_DIR, "output.txt")
+    num_of_input = problem.numberOfInput
+    ferr = open(errfile,'w')
+    fout = open(outputfile, 'w')
+    fout.close()
+    error  = ""
+    if language == 'C' or language == 'C++':
+        command = ''
+        if language == 'C':
+            command = ['/usr/bin/gcc', '-lm', '-w', filename]
+        else:
+            command = ['/usr/bin/g++', '-lm', '-w', filename]
+        subprocess.call(command, stderr=ferr)
+        with open('/home/r3gz3n/CodeKnights/logs/error.log', 'r') as error_file:
+            error = error_file.read()
+        if not error:
+            for i in range(1, num_of_input+1):
+                command = ['/home/r3gz3n/CodeKnights/codechecker',
+                       'a.out',
+                       '--input=/home/r3gz3n/CodeKnights/problems/'+ problem_id +'/in' + str(i) + '.txt',
+                       '--output=' + outputfile,
+                       '--mem=' + str(64) + 'm',
+                       '--time=' + str(2),
+                       '--chroot=.']
+                subprocess.call(command, stderr = ferr)
+                correct_output = '/home/r3gz3n/CodeKnights/problems/' + problem_id + '/out' + str(i) + '.txt'
+                with open(outputfile, 'r') as output, open(correct_output, 'r') as correctOutput:
+                    for line1, line2 in zip(output, correctOutput):
+                        if line1 != line2:
+                            return 'WA Wrong Answer'
+            command = ['rm', '/home/r3gz3n/CodeKnights/a.out']
+            subprocess.call(command)
+        else:
+            return ('CE Compilation Error', 0, 0)
+    elif language == 'Python':
+        pass
+    ferr.close()
+    with open("/home/r3gz3n/CodeKnights/logs/error.log", 'r') as error_file:
+        error = error_file.read()
+    if error[0:2] == 'AC':
+        x = error.split(' ')
+        return ('AC Accepted', float(x[2]), int(x[3]))
+    return (error, 0, 0)
 
 
-def handle_uploaded_file(uploaded_file, language):
-    filename = "/home/r3gz3n/CodeKnights/allSubmissions/" + datetime.datetime.now().strftime("%Y_%m_%d_%H_%M_%S")
+def handle_uploaded_file(uploaded_file, language, submission_time):
+    filename = "/home/r3gz3n/CodeKnights/allSubmissions/" + submission_time
     if language == 'C':
         filename += ".c"
     elif language == 'C++':
@@ -78,28 +126,20 @@ def submitPage(request):
         except KeyError:
             return HttpResponseRedirect('http://localhost:8000/team/login')
         submissionsForm = SubmissionsForm(request.POST, request.FILES)
-        handle_uploaded_file(request.FILES['solution'], request.POST['language'])
+        submission_time = datetime.datetime.now()
+        submission_time_string = submission_time.strftime("%Y_%m_%d_%H_%M_%S")
+        handle_uploaded_file(request.FILES['solution'], request.POST['language'], submission_time_string)
         if submissionsForm.is_valid():
             submission = submissionsForm.save(commit = False)
             submission.teamName = team_name
-            submission_time = datetime.datetime.now()
-            submission.submissionTime = submission_time.strftime("%Y_%m_%d_%H_%M_%S")
-            submission.timeTaken = 1
-            submission.memoryTaken = 0.2
-            submission.verdict = codecheckerDriver(submission.submissionTime, request.POST['language'], request.POST['problemId'])
+            submission.submissionTime = submission_time_string
+            (submission.verdict, submission.timeTaken, submission.memoryTaken) = compileRun(submission.submissionTime, request.POST['language'], request.POST['problemId'])
             try:
                 rank = Ranklist.objects.get(teamName = team_name)
             except Ranklist.DoesNotExist:
                 rank = Ranklist(teamName = team_name)
 
-            if (submission.verdict[0] == 'W' or submission.verdict[0] == 'R'):
-                if problem[request.POST['problemId']] == 1 and rank.problem1score == False:
-                    rank.problem1WA += 1
-                elif problem[request.POST['problemId']] == 2 and rank.problem2score == False:
-                    rank.problem2WA += 1
-                elif problem[request.POST['problemId']] == 3 and rank.problem3score == False:
-                    rank.problem3WA += 1
-            elif submission.verdict[0] == 'A':
+            if submission.verdict[0] == 'A':
                 if problem[request.POST['problemId']] == 1 and rank.problem1score == False:
                     rank.problem1score = True
                     rank.score += 1
@@ -118,6 +158,15 @@ def submitPage(request):
                     rank.totalWA += rank.problem3WA
                     time_taken = submission_time - contest_time
                     rank.totalTime += time_taken.seconds + 20*60*rank.problem3WA
+            elif (submission.verdict[0] == 'C'):
+                pass
+            else:
+                if problem[request.POST['problemId']] == 1 and rank.problem1score == False:
+                    rank.problem1WA += 1
+                elif problem[request.POST['problemId']] == 2 and rank.problem2score == False:
+                    rank.problem2WA += 1
+                elif problem[request.POST['problemId']] == 3 and rank.problem3score == False:
+                    rank.problem3WA += 1
             rank.save()
             submission.save()
             submissionsForm.save_m2m()
@@ -138,6 +187,7 @@ def getKey1(item):
 
 def getKey2(item):
     return item.totalTime
+
 
 def ranklistPage(request):
     ranklist = Ranklist.objects.all()

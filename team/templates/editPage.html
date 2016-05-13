@@ -2,14 +2,16 @@
 
 {% block title %} Edit {% endblock %}
 {% block content %}
-<a href='http://localhost:8000/team/logout'>Logout</a>
-    <div id='edit'>
+    <div id='edit' align="center">
+        {{error_message}}
+        <table>
         <form action='' method='POST'>
             {% csrf_token %}
             {% for field in edit_form %}
-            {{ field.label_tag }} {{ field }} <br/>
+            <tr><td>{{ field.label_tag }}</td><td>{{ field }} </td></tr>
             {% endfor %}
-        <input type='submit' value='Submit'/>
+            <tr><td><input type='submit' value='Submit' class="btn btn-primary btn-lg btn-block btn-xlarge"/></td></tr>
         </form>
+        </table>
     </div>
 {% endblock %}

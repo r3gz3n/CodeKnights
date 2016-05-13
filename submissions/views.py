@@ -3,7 +3,7 @@ from django.http import HttpResponse, HttpResponseRedirect
 from submissions.models import Submissions
 
 class SubmissionDetails(object):
-    def __init__(self, teamName, problemTitle, submissionTime, verdict, language, timeTaken, memoryTaken):
+    def __init__(self, teamName, problemTitle, submissionTime, verdict, language, timeTaken, memoryTaken, color):
         self.teamName = teamName
         self.problemTitle = problemTitle
         self.submissionTime = submissionTime
@@ -11,6 +11,7 @@ class SubmissionDetails(object):
         self.language = language
         self.timeTaken = timeTaken
         self.memoryTaken = memoryTaken
+        self.color = color
 
 def allSubmissionsPage(request):
     try:
@@ -27,7 +28,8 @@ def allSubmissionsPage(request):
         language = submission.language
         timeTaken = submission.timeTaken
         memoryTaken = submission.memoryTaken
-        all_submissions_details.append(SubmissionDetails(teamName, problemTitle, submissionTime, verdict, language, timeTaken, memoryTaken))
+        color = submission.color
+        all_submissions_details.append(SubmissionDetails(teamName, problemTitle, submissionTime, verdict, language, timeTaken, memoryTaken, color))
     all_submissions_details.reverse()
     t = loader.get_template('allSubmissionsPage.html')
     c = Context({'allSubmissions':all_submissions_details, 'pageTitle' : 'All Submissions'})
@@ -51,7 +53,8 @@ def mySubmissionsPage(request):
         language = submission.language
         timeTaken = submission.timeTaken
         memoryTaken = submission.memoryTaken
-        my_submissions_details.append(SubmissionDetails(teamName, problemTitle, submissionTime, verdict, language, timeTaken, memoryTaken))
+        color = submission.color
+        my_submissions_details.append(SubmissionDetails(teamName, problemTitle, submissionTime, verdict, language, timeTaken, memoryTaken, color))
     my_submissions_details.reverse()
     t = loader.get_template('allSubmissionsPage.html')
     c = Context({'allSubmissions':my_submissions_details, 'pageTitle' : 'My Submissions'})

@@ -1,16 +1,17 @@
 {% extends "base.html" %}
 {% block title %} Submit {% endblock %}
 {% block content %}
-<a href='http://localhost:8000/team/logout'>Logout</a> <br/>
 
 <div id='submit'>
+    <table>
     <form action='' method='POST' enctype="multipart/form-data">
         {% csrf_token %}
         {% for field in submissionsForm %}
-            {{ field.label_tag }} {{ field  }} <br/>
+        <tr><td>{{ field.label_tag }}</td> <td>{{ field  }}</td></tr>
         {% endfor %}
-        Solution: <input type='file' name='solution'/> <br/>
-        <input type='submit' value='Submit' />
+        <tr><td>Solution:</td> <td><input type='file' name='solution'/></td></tr>
+        <tr><td><input type='submit' value='Submit' /></td></tr>
     </form>
+    </table>
 </div>
 {% endblock %}

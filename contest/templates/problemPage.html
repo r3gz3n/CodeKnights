@@ -1,11 +1,13 @@
 {% extends "base.html" %}
 {% block title %}{{ problem.problemTitle }}{% endblock %}
 {% block content %}
-<a href='http://localhost:8000/contest/submit'>Submit</a>
-<a href='http://localhost:8000/team/logout'>Logout</a> <br/>
 
-<div id='problemdetail'>
-    <h2>{{ problem.problemTitle }}</h2> <br/>
+<div id='problemdetail' style="padding-left:30px;font-size:150%;" >
+    <h2>{{ problem.problemTitle }}</h2><br/>
     {{ problem.problemStatement|safe }}<br/>
 </div>
+<div id='submitbutton' style="padding-left:30px;">
+    <button width="50px" type="button" class="btn btn-primary btn-lg btn-block btn-xlarge" onclick="window.location='http://localhost:8000/contest/submit'">Submit</button>
+</div>
+
 {% endblock %}

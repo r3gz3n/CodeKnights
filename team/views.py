@@ -79,7 +79,10 @@ def editPage(request):
             return HttpResponseRedirect('http://localhost:8000/team/login')
         team_details = TeamDetails.objects.get(teamName=team_name)
         edit_form = TeamDetailsForm(request.POST, instance = team_details)
-        edit_form.save()
+        try:
+            edit_form.save()
+        except ValueError:
+            return render(request, 'editPage.html', {'edit_form':edit_form, 'error_message':'Please fill all the required fields correctly'})
         login_form = TeamPassForm()
         try:
             del request.session['team_name']
@@ -101,7 +104,7 @@ def editPage(request):
                                                 'member3Branch':team_details.member3Branch,
                                                 }
                                         )
-        return render(request, 'editPage.html', {'edit_form':edit_form})
+        return render(request, 'editPage.html', {'edit_form':edit_form, 'error_message':''})
 
 
 def logout(request):

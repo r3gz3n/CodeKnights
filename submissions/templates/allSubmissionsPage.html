@@ -3,30 +3,28 @@
 {% block title %} {{pageTitle}} {% endblock %}
 
 {% block content %}
-<a href='http://localhost:8000/team/logout'>Logout</a><br/>
 
-    <div id='allSubmissions'>
+    <div id='allSubmissions' style="font-size:120%">
         <table border="1"  width="100%">
             <tr>
-                <td align="center">Team Name</td>
-                <td align="center">Submission Time</td>
-                <td align="center">Problem Title</td>
-                <td align="center">Verdict</td>
-                <td align="center">Time Taken</td>
-                <td align="center">Memory Taken</td>
-                <td align="center">Language</td>
+                <th align="center">Team Name</th>
+                <th align="center">Submission Time</th>
+                <th align="center">Problem Title</th>
+                <th align="center">Verdict</th>
+                <th align="center">Time Taken</th>
+                <th align="center">Memory Taken</th>
+                <th align="center">Language</th>
             </tr>
         {% for submission in allSubmissions %}
-            <tr>
+            <tr style="color:{{submission.color}}">
                 <td align="center">{{submission.teamName}}</td>
                 <td align="center">{{submission.submissionTime}}</td>
                 <td align="center">{{submission.problemTitle}}</td>
-                <td align="center">{{submission.verdict}}</td>
+                <td align="center" style="wrap-word:break-word;">{{submission.verdict}}</td>
                 <td align="center">{{submission.timeTaken}}</td>
                 <td align="center">{{submission.memoryTaken}}</td>
                 <td align="center">{{submission.language}}</td>
             </tr>
-
         {% endfor %}
         </table>
     </div>

@@ -1,19 +1,19 @@
 {% extends 'base.html' %}
 
-{% block title %} Team Page {% endblock %}
+{% block title %} Team Details {% endblock %}
 
 {% block content %}
-<a href='http://localhost:8000/team/edit'>Edit</a>
-<a href='http://localhost:8000/team/logout'>Logout</a><br/>
 
-    <div id='teamdetail'>
-        Team Name: {{ team.teamName  }} <br/>
-        Member 1 Name: {{ team.member1Name  }} <br/>
-        Member 1 Branch: {{ team.member1Branch  }} <br/>
-        Member 2 Name: {{ team.member2Name  }} <br/>
-        Member 2 Branch: {{ team.member2Branch  }} <br/>
-        Member 3 Name: {{ team.member3Name  }} <br/>
-        Member 3 Branch: {{ team.member3Branch  }} <br/>
-
+    <div id='teamdetail' align="center">
+        <table >
+            <tr><td>Team Name:</td> <td>{{ team.teamName  }} </td></tr>
+            <tr><td>Member 1 Name:</td> <td>{{ team.member1Name  }} </td></tr>
+            <tr><td>Member 1 Branch:</td> <td>{{ team.member1Branch  }} </td></tr>
+            <tr><td>Member 2 Name:</td> <td>{{ team.member2Name  }} </td></tr>
+            <tr><td>Member 2 Branch:</td> <td>{{ team.member2Branch  }} </td></tr>
+            <tr><td>Member 3 Name:</td> <td>{{ team.member3Name  }} </td></tr>
+            <tr><td>Member 3 Branch:</td> <td>{{ team.member3Branch  }} </td></tr>
+            <tr><td><button type="button"  class="btn btn-primary btn-lg btn-block btn-xlarge" onclick="window.location='http://localhost:8000/team/edit'">Edit</button> </td></tr>
+        <table>
     </div>
 {% endblock %}

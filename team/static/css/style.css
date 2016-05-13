@@ -1,0 +1,32 @@
+@CHARSET "UTF-8";
+
+
+
+.no-padding
+{
+	padding: 0px;
+}
+.margin-bottom
+{
+	margin-bottom: 0px;	
+}
+
+.margin-top
+{
+	margin-top: 0px;
+}
+.margin
+{
+	margin: 0px;
+}
+
+.border
+{
+	border: 0px;
+}
+
+.top {
+    height: 10px; /* Whatever you want. */
+}
+
+

@@ -3,17 +3,16 @@
 {% block title %} RankList {% endblock %}
 
 {% block content %}
-<a href='http://localhost:8000/team/logout'>Logout</a><br/>
 
-    <div id='ranklist'>
+    <div id='ranklist' style="font-size:120%">
         <table border="1"  width="100%">
-            <tr>
-                <td align="center">Team Name</td>
-                <td align="center">Total Time</td>
-                <td align="center">Score</td>
-                <td align="center">Problem 1</td>
-                <td align="center">Problem 2</td>
-                <td align="center">Problem 3</td>
+            <tr align="center">
+                <th align="center">Team Name</th>
+                <th align="center">Total Time</th>
+                <th align="center">Score</th>
+                <th align="center">Problem 1</th>
+                <th align="center">Problem 2</th>
+                <th align="center">Problem 3</th>
             </tr>
         {% for rank in ranklist %}
             <tr>

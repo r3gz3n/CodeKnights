@@ -1,0 +1,13 @@
+<p>Given an integer <i>N</i>, print the factorial of <i>N</i>.</p>
+
+<p><b>Input:</b><br/>
+First line will contain an integer <i>T</i>, number of test cases.<br/>
+Next <i>T</i> lines contains one integer <i>N</i>.<br/>
+</p>
+<p><b>Output:</b><br/>
+For each test case, print the factorial of the integer <i>N</i>.<br/>
+</p>
+<p><b>Constraints:</b><br/>
+1 <= <i>T</i> <= 100<br/>
+1 <= <i>N</i> <= 10<br/>
+</p>

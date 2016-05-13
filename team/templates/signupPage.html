@@ -1,16 +1,18 @@
-{% extends 'base.html' %}
+{% extends 'base1.html' %}
 
 {% block title %} Signup {% endblock %}
 
 {% block content %}
-    <div id='teamdetail'>
-        {{ error_message }}
+    <div id='teamdetail' align="center">
+        <font size="5px" color="red">{{ error_message }}</font>
+        <table>
         <form action='' method='POST'>
             {% csrf_token %}
-        {% for field in signup_form %}
-        {{ field.label_tag }} {{ field }} <br/>
-        {% endfor %}
-        <input type='submit' value='Submit'/>
+                {% for field in signup_form %}
+                    <tr><td>{{ field.label_tag }}</td><td>{{ field }} </td></tr>
+            {% endfor %}
+            <tr><td></td><td><input type='submit' value='Submit'/></td></tr>
         </form>
+        </table>
     </div>
 {% endblock %}

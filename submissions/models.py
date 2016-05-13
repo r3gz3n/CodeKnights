@@ -7,12 +7,14 @@ class Submissions(models.Model):
     submissionTime = models.CharField(max_length=20)
     problemId = models.CharField(max_length=50)
     language = models.CharField(max_length=10)
-    verdict = models.CharField(max_length=50)
+    verdict = models.CharField(max_length=1000)
     timeTaken = models.FloatField()
     memoryTaken = models.IntegerField()
+    color = models.CharField(max_length=10)
 
 class SubmissionsAdmin(admin.ModelAdmin):
     list_display = ('teamName', 'submissionTime', 'problemId', 'language', 'verdict', 'timeTaken', 'memoryTaken')
 
 admin.site.register(Submissions, SubmissionsAdmin)
+
 

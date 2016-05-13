@@ -7,7 +7,6 @@ import datetime, subprocess, os
 
 problem = {'Hello_World' : 1, 'Sum_Of_Two_Numbers' : 2, 'Small_Factorial' : 3}
 contest_time = datetime.datetime(2016, 3, 27, 12, 50, 0)
-verdict = ["Accepted", "Internal Error", "Compilation Error", "RunTime Error", "Wrong Answer", "Time Limit Exceeded", "Memory Limit Exceeded"]
 
 
 class Problem(object):
@@ -19,7 +18,9 @@ class Problem(object):
 
 
 def problemPage(request):
-    if 'team_name' not in request.session:
+    try:
+        team_name = request.session['team_name']
+    except KeyError:
         return HttpResponseRedirect('http://localhost:8000/team/login')
     problem_id = request.GET.get('q')
     try:
@@ -90,7 +91,7 @@ def compileRun(solution, language, problem_id):
                 with open(outputfile, 'r') as output, open(correct_output, 'r') as correctOutput:
                     for line1, line2 in zip(output, correctOutput):
                         if line1 != line2:
-                            return 'WA Wrong Answer'
+                            return ('WA Wrong Answer', 0, 0)
             command = ['rm', '/home/r3gz3n/CodeKnights/a.out']
             subprocess.call(command)
         else:
@@ -140,6 +141,7 @@ def submitPage(request):
                 rank = Ranklist(teamName = team_name)
 
             if submission.verdict[0] == 'A':
+                submission.color = "green"
                 if problem[request.POST['problemId']] == 1 and rank.problem1score == False:
                     rank.problem1score = True
                     rank.score += 1
@@ -159,8 +161,9 @@ def submitPage(request):
                     time_taken = submission_time - contest_time
                     rank.totalTime += time_taken.seconds + 20*60*rank.problem3WA
             elif (submission.verdict[0] == 'C'):
-                pass
+                submission.color = "yellow"
             else:
+                submission.color = "red"
                 if problem[request.POST['problemId']] == 1 and rank.problem1score == False:
                     rank.problem1WA += 1
                 elif problem[request.POST['problemId']] == 2 and rank.problem2score == False:
@@ -190,6 +193,10 @@ def getKey2(item):
 
 
 def ranklistPage(request):
+    try:
+        team_name = request.session['team_name']
+    except KeyError:
+        return HttpResponseRedirect('http://localhost:8000/team/login')
     ranklist = Ranklist.objects.all()
     ranklist = sorted(ranklist, key=getKey2)
     ranklist = sorted(ranklist, key=getKey1, reverse = True)

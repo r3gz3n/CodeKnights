@@ -1,0 +1,14 @@
+<p>Given two integers <i>A</i> and <i>B</i>, print the sum of <i>A</i> and <i>B</i>.</p>
+
+<p><b>Input:</b><br/>
+First line will contain an integer <i>T</i>, number of test cases.<br/>
+Next <i>T</i> lines contains two integers <i>A</i> and <i>B</i>.<br/>
+</p>
+<p><b>Output:</b><br/>
+For each test case, print the sum of the two integers <i>A</i> and <i>B</i>.<br/>
+</p>
+<p><b>Constraints:</b><br/>
+1 <= <i>T</i> <= 100<br/>
+1 <= <i>A</i> <= 10<br/>
+1 <= <i>B</i> <= 10<br/>
+</p>
